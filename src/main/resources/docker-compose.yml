@@ -1,0 +1,15 @@
+version: '3.0'
+services:
+    mysql:
+        image: mysql:5.7-oracle
+        container_name: "mysqlDB"
+        ports:
+            - "3366:3306"
+        environment:
+            TZ: "Europe/Moscow"
+            MYSQL_DATABASE: "myDB"
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_USER: "UserHib"
+            MYSQL_PASSWORD: "password"
+
+#БД для тестов
