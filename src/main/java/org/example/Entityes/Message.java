@@ -14,9 +14,9 @@ public class Message {
     @Id
     @GeneratedValue
     private Long ID;
-    @ManyToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    User user;
+    protected User user;
     private String text;
 
     public User getUser() {
@@ -24,6 +24,7 @@ public class Message {
     }
     public void setUser(User user) {
         this.user = user;
+        user.addMsg(this);
     }
     public String getText(){
         return text;

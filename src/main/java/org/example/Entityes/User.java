@@ -17,7 +17,7 @@ public class User {
 
     @OneToMany
     @JoinColumn(name = "message_id")
-    List<Message> messages = new ArrayList<>();
+    protected List<Message> messages = new ArrayList<>();
 
     private String password;
 
