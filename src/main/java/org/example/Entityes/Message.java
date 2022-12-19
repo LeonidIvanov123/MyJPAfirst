@@ -6,6 +6,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.xml.crypto.Data;
+import java.util.Date;
 
 @Entity
 @DynamicInsert
@@ -18,6 +20,12 @@ public class Message {
     @JoinColumn(name = "user_id")
     protected User user;
     private String text;
+
+    private final String dataOfSend;
+
+    public Message() {
+        dataOfSend = new Date().toString();
+    }
 
     public User getUser() {
         return user;

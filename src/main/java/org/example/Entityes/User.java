@@ -2,6 +2,7 @@ package org.example.Entityes;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +16,8 @@ public class User {
     @GeneratedValue
     private Long ID;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY,
+               cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "message_id")
     protected List<Message> messages = new ArrayList<>();
 
@@ -30,12 +32,6 @@ public class User {
     }
     public void setMessages(List<Message> messages) {
         this.messages = messages;
-        /*if(messages == null) {
-            messages = new ArrayList<Message>();
-            messages.add(message);
-        }else {
-            messages.add(message);
-        }*/
     }
 
     public String getUsername() {

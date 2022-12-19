@@ -12,6 +12,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,12 +32,14 @@ public class Main {
         Message msg;
 
         //admin уникальный
-        User admin = session.createQuery("FROM User where username='admin'", User.class).getSingleResult();
-        msg = new Message();
-        msg.setUser(admin);
-        msg.setText("Start program in " + new Date().toString());
-        storMSG(msg);
-        msg = null;
+        try {
+            User admin = session.createQuery("FROM User where username='admin'", User.class).getSingleResult();
+            msg = new Message();
+            msg.setUser(admin);
+            msg.setText("Start program in " + new Date().toString());
+            storMSG(msg);
+            msg = null;
+        }catch (NoResultException e){}
 
         System.out.println("Введите Имя: ");
 
@@ -47,8 +50,9 @@ public class Main {
         for (User u:users) {
             if(u.getUsername().equals(data)) {
                 user = u;
-                System.out.println("Hi again, " + user.getUsername());
-                System.out.println("\nYou wrote last message: "+ user.getMessages().get(user.getMessages().size()-1).getText());
+                System.out.println("\n\nHi again, " + user.getUsername());
+                System.out.println("\nYou wrote last message: "+ user.getMessages().get(user.getMessages().size()-1).getText() +
+                        " num of messages = " + user.getMessages().size());
                 break;
             }
         }
@@ -60,12 +64,6 @@ public class Main {
         }
 
 
-        /*
-        user.addMsg(msg);
-        msg.setText("hi hibernate!, start program at " + new Date().toString());
-        storMSG(msg);
-        */
-
         System.out.println("Введите сообщение для сохранения в БД (или 'Exit' для выхода из программы): ");
 
 
@@ -75,6 +73,7 @@ public class Main {
             msg = new Message();
             msg.setUser(user);
             msg.setText(data);
+            //user.addMsg(msg); //появляется лишний update к БД - нужно ли?!?
             storMSG(msg);
         }
 
