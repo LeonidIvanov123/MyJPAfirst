@@ -31,6 +31,7 @@
 
         <mapping class="org.example.Entityes.Message"/>
         <mapping class="org.example.Entityes.User"/>
+        <mapping class="org.example.Entityes.Rules"/>
         <!--mapping class="ivan.Person" /-->
 
 

@@ -1,7 +1,7 @@
 version: '3.0'
 services:
     mysql:
-        image: mysql:latest
+        image: mysql:5.7-oracle
         container_name: "mysqlDB"
         ports:
             - "3366:3306"
@@ -13,3 +13,4 @@ services:
             MYSQL_PASSWORD: "password"
 
 #БД для тестов
+# image: mysql:5.7-oracle

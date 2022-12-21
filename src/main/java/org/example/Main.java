@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.Entityes.Message;
+import org.example.Entityes.Rules;
 import org.example.Entityes.User;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -9,7 +10,9 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.exception.JDBCConnectionException;
 import org.hibernate.query.Query;
+import org.hibernate.service.spi.ServiceException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -66,17 +69,37 @@ public class Main {
 
         System.out.println("Введите сообщение для сохранения в БД (или 'Exit' для выхода из программы): ");
 
-
+        while (true) {
+            switch (data = scanner.nextLine()) {
+                case "Exit" -> System.exit(0);
+                case "Admin" -> {
+                    Rules rules = new Rules();
+                    rules.setAdmin(true);
+                    user.setRules(rules);
+                    rules.setUser(user);
+                    Transaction tx = session.beginTransaction();
+                    session.save(rules);
+                    tx.commit();
+                    System.out.println("At now " + user.getUsername() + " admin.");
+                }
+                default -> {
+                    msg = new Message();
+                    msg.setUser(user);
+                    msg.setText(data);
+                    //user.addMsg(msg); //появляется лишний update к БД - нужно ли?!?
+                    storMSG(msg);
+                }
+            }
+        }
             //switch-case
-        while(!(data = scanner.nextLine()).equals("Exit")){
-            //data = scanner.nextLine();
+  /*      while(!(data = scanner.nextLine()).equals("Exit")){
             msg = new Message();
             msg.setUser(user);
             msg.setText(data);
             //user.addMsg(msg); //появляется лишний update к БД - нужно ли?!?
             storMSG(msg);
         }
-
+*/
     }
 
     public static boolean storMSG(Message msg){
@@ -86,8 +109,15 @@ public class Main {
         return true;
     }
 
-    private static Session getSession(){
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        return sessionFactory.openSession();
+    private static Session getSession() throws ServiceException{
+        Session session = null;
+        try {
+            SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+            session = sessionFactory.openSession();
+        }catch (ServiceException ie){
+            System.out.println("Не удается соединиться с БД.");
+            System.exit(3);
+        }
+        return session;
     }
 }

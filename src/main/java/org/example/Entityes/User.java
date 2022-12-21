@@ -17,11 +17,17 @@ public class User {
     private Long ID;
 
     @OneToMany(fetch = FetchType.LAZY,
-               cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+               cascade = {CascadeType.PERSIST, CascadeType.REMOVE}) //Не нужно отдельно каждую запись сохранять\удалять
     @JoinColumn(name = "message_id")
     protected List<Message> messages = new ArrayList<>();
 
     private String password;
+    @OneToOne(
+            fetch = FetchType.LAZY,
+            optional = false,
+            cascade = CascadeType.PERSIST
+    )
+    private Rules rules;
 
     public List<Message> getMessages() {
         return messages;
@@ -53,5 +59,11 @@ public class User {
     }
 
 
+    public Rules getRules() {
+        return rules;
+    }
 
+    public void setRules(Rules rules) {
+        this.rules = rules;
+    }
 }
