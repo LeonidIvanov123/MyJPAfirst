@@ -63,6 +63,11 @@ public class Main {
             user = new User();
             user.setUsername(data);
             user.setPassword("123");
+            var rule = new Rules();
+            rule.setUser(user);
+            rule.setAdmin(false);
+            session.save(rule);
+            user.setRules(rule);
             session.save(user);
         }
 

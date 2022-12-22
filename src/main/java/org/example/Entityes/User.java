@@ -9,6 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(
+        indexes = {
+                @Index(
+                        name = "IDX_USERNAME",
+                        columnList = "username"
+                )
+        }
+)
 @DynamicInsert
 @DynamicUpdate
 public class User {
